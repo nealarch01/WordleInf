@@ -2,7 +2,7 @@ body {
     display: flex;
     width: 100%;
     height: 100vh;
-    overflow-x: hidden;
+    overflow-y: hidden;
     flex-direction: column;
     margin: 0px;
 }
@@ -17,12 +17,27 @@ body.root-light {
 
 div.top-bar {
     height: 70px;
-    background-color: gray;
+    background-color: transparent;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-left: 10px;
     padding-right: 10px;
+    border-bottom: 2px solid #D4D6DA;
+}
+
+div.top-bar.dark {
+    background-color: black;
+    color: white;
+}
+
+div.top-bar.light{
+    background-color: white;
+    color: black;
+}
+
+div.main-container {
+    padding-top: 20px;
 }
 
 a.src-code-icon {
@@ -32,6 +47,15 @@ a.src-code-icon {
 
 a.src-code-icon:hover {
     opacity: 0.5;
+}
+
+div.dark-mode-toggler {
+    cursor: pointer;
+}
+
+div.dark-mode-toggler > span {
+    font-size: 2.5em;
+    font-weight: 500;
 }
 
 i.devicon-github-original {
@@ -158,19 +182,55 @@ div.cell-back {
     transition: transform 0.8s;
 }
 
-div.cell-filled {
-    border: 3px solid #888A8C;
-    font-weight: bold;
-}
 
-div.cell-incorrect {
+div.cell-incorrect.cell-dark {
     background-color: #39393B;
+    border: 3px solid #39393B;
 }
 
-div.cell-partial {
+div.cell-incorrect.cell-light {
+    background-color: #797C7E;
+    border: 3px solid #797C7E;
+    color: #FFFFFF;
+}
+
+div.cell-partial.cell-dark {
     background-color: #B1A04D;
+    border: 3px solid #B1A04D;
 }
 
-div.cell-correct {
+div.cell-partial.cell-light {
+    background-color: #C5B566;
+    border: 3px solid #C5B566;
+    color: #FFFFFF;
+}
+
+div.cell-correct.cell-dark {
     background-color: #608B54;
+    border: 3px solid #608B54;
+}
+
+div.cell-correct.cell-light {
+    background-color: #79A86B;
+    border: 3px solid #79A86B;
+    color: #FFFFFF;
+}
+
+div.game-over-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+div.close-modal-btn {
+    float: right;
+    font-size: 1.5em;
+    font-weight: bold;
 }

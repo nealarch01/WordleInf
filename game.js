@@ -1,15 +1,23 @@
-const Words = [
+const REPO = "https://github.com/nealarch01/WordleInf"
+
+var WORDS = [
     "LINUX",
-    "APPLE",
-    "FRUIT",
-    "SWIFT"
 ];
+
+fetch("./words.json")
+    .then(response => response.json())
+    .then(data => {
+        WORDS = data;
+        newGame();
+    });
+
+const FLIP_DURATION = 450;
 
 // State Variables
 var isDarkMode = false;
 var currentRow = 0;
 var currentCol = 0;
-var word = selectRandomWord();
+var word = "";
 
 
 // 
@@ -17,7 +25,8 @@ var word = selectRandomWord();
 // 
 
 function selectRandomWord() {
-    return Words[Math.floor(Math.random() * Words.length)];
+    let randomWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+    return randomWord.toUpperCase();
 }
 
 function checkAnswer() {
@@ -29,7 +38,7 @@ function checkAnswer() {
         return;
     }
     updateBoardColors(userInput)
-    const maxDelay = 250 * userInput.length;
+    const maxDelay = FLIP_DURATION * userInput.length;
     setTimeout(() => {
         console.log("Moving to the next row");
         moveNextRow();
@@ -56,6 +65,12 @@ const gameBoard = [
     ["", "", "", "", ""],
     ["", "", "", "", ""]
 ];
+
+function newGame() {
+    currentCol = 0;
+    currentRow = 0;
+    word = selectRandomWord();
+}
 
 function isBoardEmpty() {
     for (let i = 0; i < gameBoard.length; i++) {
@@ -86,7 +101,6 @@ function setCell(character) {
     }
     var cellRef = document.getElementById(`r${currentRow}c${currentCol}`);
     const cellText = cellRef.firstChild;
-    console.log(cellText);
     gameBoard[currentRow][currentCol] = character;
     cellText.innerHTML = character;
     cellRef.classList.add("animate-grow-shrink");
@@ -100,7 +114,6 @@ function deleteCellInput() {
         return;
     }
     var cellRef = document.getElementById(`r${currentRow}c${currentCol}`);
-    console.log(currentCol);
     gameBoard[currentRow][currentCol] = "";
     cellRef.firstChild.innerHTML = "";
     cellRef.classList.remove("animate-grow-shrink")
@@ -110,11 +123,18 @@ function toggleDarkMode() {
     isDarkMode = !isDarkMode;
     console.log(`Toggling mode: ${isDarkMode ? "dark" : "light"}`);
     var bodyRootRef = document.getElementById("root")
+    document.querySelector("div.top-bar").classList.toggle("dark");
     bodyRootRef.className = isDarkMode ? "root-dark" : "root-light";
     // Select all cells
     var cells = document.getElementsByClassName("cell");
     for (let i = 0; i < cells.length; i++) {
-        cells[i].className = isDarkMode ? "cell cell-dark" : "cell cell-light";
+        if (isDarkMode) {
+            cells[i].classList.remove("cell-light");
+            cells[i].classList.add("cell-dark");
+        } else {
+            cells[i].classList.remove("cell-dark");
+            cells[i].classList.add("cell-light");
+        }
     }
     // Update the keys
     var keys = document.getElementsByClassName("key");
@@ -134,7 +154,6 @@ function updateBoardColors(userInput) {
         letterMap.set(word[i], letterCount++);
     }
     for (let i = 0; i < userInput.length; i++) {
-        console.log(currentRow);
         setTimeout(() => {
             console.log(`Coordinates: r${currentRow}c${i}`);
             const currentCelRef = document.getElementById(`r${currentRow}c${i}`);
@@ -157,7 +176,7 @@ function updateBoardColors(userInput) {
             } else {
                 currentCelRef.classList.add("cell-incorrect")
             }
-        }, 250 * i);
+        }, FLIP_DURATION * i);
     }
     
 }
@@ -169,7 +188,10 @@ function updateBoardColors(userInput) {
 // 
 
 (initialSetup = () => {
-    toggleDarkMode();
+    // Check system preferences for dark mode
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        toggleDarkMode();
+    }
     var boardRef = document.getElementById("board");
     for (let i = 0; i < gameBoard.length; i++) {
         const rowDiv = document.createElement("div");
@@ -236,4 +258,10 @@ deleteGameKey.addEventListener("click", () => {
 const enterKey = document.getElementById("enter-btn");
 enterKey.addEventListener("click", () => {
     checkAnswer();
+});
+
+const darkModeToggler = document.querySelector("div.dark-mode-toggler");
+darkModeToggler.addEventListener("click", () => {
+    toggleDarkMode();
+    console.log("TOGGLING")
 });
