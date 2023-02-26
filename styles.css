@@ -1,0 +1,176 @@
+body {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow-x: hidden;
+    flex-direction: column;
+    margin: 0px;
+}
+
+body.root-dark {
+    background-color: #121213;
+}
+
+body.root-light {
+    background-color: white;
+}
+
+div.top-bar {
+    height: 70px;
+    background-color: gray;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+a.src-code-icon {
+    text-decoration: none;
+    color: black;
+}
+
+a.src-code-icon:hover {
+    opacity: 0.5;
+}
+
+i.devicon-github-original {
+    font-size: 2.0em;
+    cursor: pointer;
+}
+
+.title {
+    font-family: Arial, Helvetica, sans-serif
+}
+
+div.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+    margin: 10px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+div.keyboard-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+div.keyboard-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+div.key {
+    height: 75px;
+    width: 55px;
+    background-color: #D4D6DA;
+    color: black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+    margin-right: 4px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 4px;
+}
+
+div#enter-btn {
+    width: 80px;
+}
+
+div.key-light {
+    color: #121213;
+    background-color: #D4D6DA;
+}
+
+div.key-dark {
+    background-color: #818183;
+    color: #FFFFFF;
+}
+
+div.row {
+    display: flex;
+    flex-direction: row;
+}
+
+div.cell {
+    height: 60px;
+    width: 60px;
+    margin: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+span.cell-text {
+    font-size: 2.4em;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+span.cell-text-back {
+    transform: rotateX(180deg);
+    transition: transform 0.8s;
+}
+
+@keyframes grow-shrink {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-grow-shrink {
+    animation: grow-shrink 0.3s ease-in-out;
+}
+
+div.cell-light {
+    border: 3px solid #D4D6DA;
+}
+
+div.cell-dark {
+    border: 3px solid #3A3A3C;
+    color: #FFFFFF;
+}
+
+div.cell-back {
+    transform: rotateX(180deg);
+    transition: transform 0.8s;
+}
+
+div.cell-filled {
+    border: 3px solid #888A8C;
+    font-weight: bold;
+}
+
+div.cell-incorrect {
+    background-color: #39393B;
+}
+
+div.cell-partial {
+    background-color: #B1A04D;
+}
+
+div.cell-correct {
+    background-color: #608B54;
+}
