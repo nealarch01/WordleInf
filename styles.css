@@ -167,11 +167,11 @@ span.cell-text-back {
     animation: grow-shrink 0.3s ease-in-out;
 }
 
-div.cell-light {
+div.cell.light {
     border: 3px solid #D4D6DA;
 }
 
-div.cell-dark {
+div.cell.dark {
     border: 3px solid #3A3A3C;
     color: #FFFFFF;
 }
@@ -182,34 +182,34 @@ div.cell-back {
 }
 
 
-div.cell-incorrect.cell-dark {
+div.cell-incorrect.dark {
     background-color: #39393B;
     border: 3px solid #39393B;
 }
 
-div.cell-incorrect.cell-light {
+div.cell-incorrect.light {
     background-color: #797C7E;
     border: 3px solid #797C7E;
     color: #FFFFFF;
 }
 
-div.cell-partial.cell-dark {
+div.cell-partial.dark {
     background-color: #B1A04D;
     border: 3px solid #B1A04D;
 }
 
-div.cell-partial.cell-light {
+div.cell-partial.light {
     background-color: #C5B566;
     border: 3px solid #C5B566;
     color: #FFFFFF;
 }
 
-div.cell-correct.cell-dark {
+div.cell-correct.dark {
     background-color: #608B54;
     border: 3px solid #608B54;
 }
 
-div.cell-correct.cell-light {
+div.cell-correct.light {
     background-color: #79A86B;
     border: 3px solid #79A86B;
     color: #FFFFFF;
