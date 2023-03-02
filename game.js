@@ -31,23 +31,30 @@ function selectRandomWord() {
 
 function checkAnswer() {
     let userInput = "";
-    for (let i = 0; i < gameBoard[currentRow].length; i++) { 
+    for (let i = 0; i < gameBoard[currentRow].length; i++) {
         userInput += gameBoard[currentRow][i];
     }
     if (userInput.length < word.length) {
         return;
     }
-    updateBoardColors(userInput)
+    // updateBoardColors(userInput)
+    updateBoard(userInput);
     const maxDelay = FLIP_DURATION * userInput.length;
     setTimeout(() => {
         console.log("Moving to the next row");
+        if (userInput === word) {
+            alert("Correct!");
+            newGame();
+            return;
+        }
         moveNextRow();
-    }, maxDelay + 100); // Add a safety delay
+    }, maxDelay + 100); // Add a safety delay (+100) for the animation to finish
 }
 
 function moveNextRow() {
     if (currentRow === 5) {
-        alert("Game is over!")
+        alert("Game Over! The word was: " + word);
+        newGame();
         return;
     }
     currentRow++;
@@ -70,6 +77,24 @@ function newGame() {
     currentCol = 0;
     currentRow = 0;
     word = selectRandomWord();
+    console.log(word);
+    resetBoard();
+}
+
+function resetBoard() {
+    for (let i = 0; i < gameBoard.length; i++) {
+        for (let j = 0; j < gameBoard[i].length; j++) {
+            gameBoard[i][j] = "";
+            var cellRef = document.getElementById(`r${i}c${j}`);
+            cellRef.firstChild.innerHTML = "";
+            cellRef.classList.remove("cell-back");
+            cellRef.classList.remove("cell-correct");
+            cellRef.classList.remove("cell-incorrect");
+            cellRef.classList.remove("cell-partial");
+            cellRef.classList.remove("animate-grow-shrink");
+            cellRef.firstChild.classList.remove("cell-text-back");
+        }
+    }
 }
 
 function isBoardEmpty() {
@@ -129,17 +154,65 @@ function toggleDarkMode() {
     var cells = document.getElementsByClassName("cell");
     for (let i = 0; i < cells.length; i++) {
         if (isDarkMode) {
-            cells[i].classList.remove("cell-light");
-            cells[i].classList.add("cell-dark");
+            cells[i].classList.remove("light");
+            cells[i].classList.add("dark");
         } else {
-            cells[i].classList.remove("cell-dark");
-            cells[i].classList.add("cell-light");
+            cells[i].classList.remove("dark");
+            cells[i].classList.add("light");
         }
     }
     // Update the keys
     var keys = document.getElementsByClassName("key");
     for (let i = 0; i < keys.length; i++) {
         keys[i].className = isDarkMode ? "key key-dark" : "key key-light";
+    }
+}
+
+function updateBoard(userInput) {
+    const letterMap = new Map();
+    for (let i = 0; i < word.length; i++) {
+        let letterCount = letterMap.get(word[i]);
+        if (letterMap.get(word[i]) === undefined) {
+            letterMap.set(word[i], [i]);
+            continue;
+        }
+        letterIndices = letterMap.get(word[i]);
+        letterIndices.push(i);
+        letterMap.set(word[i], letterIndices);
+    }
+
+    // Algorithm to check
+    // Iterate through the userInput characters
+
+    for (let i = 0; i < userInput.length; i++) {
+        setTimeout(() => {
+            const currentCelRef = document.getElementById(`r${currentRow}c${i}`);
+            currentCelRef.firstChild.classList.add("cell-text-back");
+            currentCelRef.classList.add("cell-back");
+            let characterIndices = letterMap.get(userInput[i]);
+            if (characterIndices === undefined) {
+                currentCelRef.classList.add("cell-incorrect");
+            } else {
+                // Check if i is in the characterIndices array
+                let updatedCharacterIndices = [];
+                if (characterIndices.includes(i)) {
+                    // Mark the cell as correct
+                    currentCelRef.classList.add("cell-correct");
+                    // Remove i from the characterIndices array
+                    characterIndices.splice(characterIndices.indexOf(i), 1);
+                    updatedCharacterIndices = characterIndices;
+                } else {
+                    currentCelRef.classList.add("cell-partial");
+                    characterIndices.splice(characterIndices.pop());
+                    updatedCharacterIndices = characterIndices;
+                }
+                if (updatedCharacterIndices.length === 0) {
+                    letterMap.delete(userInput[i]);
+                } else {
+                    letterMap.set(userInput[i], updatedCharacterIndices);
+                }
+            }
+        }, FLIP_DURATION * i);
     }
 }
 
@@ -164,21 +237,24 @@ function updateBoardColors(userInput) {
                 // Correct letter in correct position
                 currentCelRef.classList.add("cell-correct");
                 letterCount--;
-                letterMap.set(word[i], letterCount)
+                letterMap.set(word[i], letterCount);
                 return;
             }
             let letterCount = letterMap.get(userInput[i]) ?? 0;
-            if (letterCount > 0) {
-                // Correct letter in wrong position
-                currentCelRef.classList.add("cell-partial");
+            if (letterCount > 0) { // If the letter exists (correct letter in wrong position)
+                // If the letter exists (at the correct position, we have a duplicate letter)
                 letterCount--;
-                letterMap.set(userInput[i], letterCount)
+                letterMap.set(userInput[i], letterCount);
             } else {
                 currentCelRef.classList.add("cell-incorrect")
             }
         }, FLIP_DURATION * i);
     }
-    
+}
+
+// If the input is too short, then the board will make a shake animation
+function shakeBoard() {
+    const boardRef = document.getElementById("board");
 }
 
 
@@ -201,9 +277,9 @@ function updateBoardColors(userInput) {
             const cellDiv = document.createElement("div");
             cellDiv.className = "cell";
             if (isDarkMode) {
-                cellDiv.className += " cell-dark";
+                cellDiv.classList.add("dark");
             } else {
-                cellDiv.className += " cell-light";
+                cellDiv.classList.add("light");
             }
             cellDiv.id = `r${i}c${j}`;
             var cellText = document.createElement("span");
