@@ -77,7 +77,6 @@ function newGame() {
     currentCol = 0;
     currentRow = 0;
     word = selectRandomWord();
-    console.log(word);
     resetBoard();
 }
 
@@ -211,42 +210,6 @@ function updateBoard(userInput) {
                 } else {
                     letterMap.set(userInput[i], updatedCharacterIndices);
                 }
-            }
-        }, FLIP_DURATION * i);
-    }
-}
-
-function updateBoardColors(userInput) {
-    const letterMap = new Map();
-    for (let i = 0; i < word.length; i++) {
-        let letterCount = letterMap.get(word[i]);
-        if (letterCount === undefined) {
-            letterMap.set(word[i], 1);
-            continue;
-        }
-        letterMap.set(word[i], letterCount++);
-    }
-    for (let i = 0; i < userInput.length; i++) {
-        setTimeout(() => {
-            console.log(`Coordinates: r${currentRow}c${i}`);
-            const currentCelRef = document.getElementById(`r${currentRow}c${i}`);
-            currentCelRef.firstChild.classList.add("cell-text-back"); // Rotate the text
-            currentCelRef.classList.add("cell-back");
-            if (userInput[i] === word[i]) { // Correct letter in correct position
-                let letterCount = letterMap.get(word[i]);
-                // Correct letter in correct position
-                currentCelRef.classList.add("cell-correct");
-                letterCount--;
-                letterMap.set(word[i], letterCount);
-                return;
-            }
-            let letterCount = letterMap.get(userInput[i]) ?? 0;
-            if (letterCount > 0) { // If the letter exists (correct letter in wrong position)
-                // If the letter exists (at the correct position, we have a duplicate letter)
-                letterCount--;
-                letterMap.set(userInput[i], letterCount);
-            } else {
-                currentCelRef.classList.add("cell-incorrect")
             }
         }, FLIP_DURATION * i);
     }
