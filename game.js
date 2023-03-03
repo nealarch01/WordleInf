@@ -4,6 +4,8 @@ var WORDS = [
     "LINUX",
 ];
 
+var WORDMAP = new Map();
+
 fetch("./words.json")
     .then(response => response.json())
     .then(data => {
@@ -34,10 +36,10 @@ function checkAnswer() {
     for (let i = 0; i < gameBoard[currentRow].length; i++) {
         userInput += gameBoard[currentRow][i];
     }
-    if (userInput.length < word.length) {
-        return;
+    if (userInput.length < word.length) { // Do not check if there are empty cells
+        shakeRow(currentRow);
+        return; 
     }
-    // updateBoardColors(userInput)
     updateBoard(userInput);
     const maxDelay = FLIP_DURATION * userInput.length;
     setTimeout(() => {
@@ -218,6 +220,18 @@ function updateBoard(userInput) {
 // If the input is too short, then the board will make a shake animation
 function shakeBoard() {
     const boardRef = document.getElementById("board");
+    boardRef.classList.add("shake");
+    setTimeout(() => {
+        boardRef.classList.remove("shake"); // Remove after 0.4s
+    }, 400);
+}
+
+function shakeRow(rowNumber) {
+    const rowRef = document.getElementById(`r${rowNumber}`);
+    rowRef.classList.add("shake");
+    setTimeout(() => {
+        rowRef.classList.remove("shake"); // Remove after 0.4s
+    }, 400);
 }
 
 
@@ -268,7 +282,7 @@ document.addEventListener('keydown', (event) => {
         if (!/[A-Z]/.test(letter)) {
             return;
         }
-        setCell(letter)
+        setCell(letter);
     }
     if (keyName === "Enter") {
         checkAnswer();
@@ -276,6 +290,17 @@ document.addEventListener('keydown', (event) => {
         deleteCellInput();
     }
 });
+
+
+// 
+// KEYBOARD operations
+// 
+
+// When a key has already been used, it will be grayed out
+function grayoutKey() {
+    const keyRef = document.getElementById(`key-${currentKey}`);
+    keyRef.classList.add("key-disabled");
+}
 
 const keyboardContainerRef = document.getElementById("keyboard-container");
 (initializeGameKeyboardEvents = () => {
@@ -299,8 +324,15 @@ enterKey.addEventListener("click", () => {
     checkAnswer();
 });
 
-const darkModeToggler = document.querySelector("div.dark-mode-toggler");
-darkModeToggler.addEventListener("click", () => {
+const darkModeToggler = document.querySelector(".dark-mode-toggler");
+darkModeToggler.addEventListener("click", (event) => {
+    event.preventDefault(); // Prevents the page from reloading
     toggleDarkMode();
-    console.log("TOGGLING")
+    if (isDarkMode) {
+        darkModeToggler.classList.remove("light");
+        darkModeToggler.classList.add("dark");
+    } else {
+        darkModeToggler.classList.remove("dark");
+        darkModeToggler.classList.add("light");
+    }
 });

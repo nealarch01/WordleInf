@@ -48,13 +48,24 @@ a.src-code-icon:hover {
     opacity: 0.5;
 }
 
-div.dark-mode-toggler {
+.dark-mode-toggler {
     cursor: pointer;
+    margin-right: 10px;
+    border: none;
+    background: none;
 }
 
-div.dark-mode-toggler > span {
-    font-size: 2.5em;
+.dark-mode-toggler > span {
+    font-size: 3.0em;
     font-weight: 500;
+}
+
+.dark-mode-toggler > span {
+    color: #121213;
+}
+
+.dark-mode-toggler.dark > span {
+    color: #D4D6DA;
 }
 
 i.devicon-github-original {
@@ -110,6 +121,11 @@ div.key {
     margin-top: 4px;
 }
 
+div.key.grayed {
+    background-color: #797C7E;
+    color: white;
+}
+
 div#enter-btn {
     width: 80px;
 }
@@ -129,6 +145,41 @@ div.row {
     flex-direction: row;
 }
 
+/* Make a left right shake animation */
+@keyframes shake {
+    0% {
+        transform: translateX(0px);
+    }
+
+    10% {
+        transform: translateX(10px);
+    }
+
+    30% {
+        transform: translateX(0px);
+    }
+
+    50% {
+        transform: translateX(-10px);
+    }
+
+    70% {
+        transform: translateX(0px);
+    }
+
+    90% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0px);
+    }
+}
+
+div.shake {
+    animation: shake 0.2s linear;
+}
+
 div.cell {
     height: 60px;
     width: 60px;
@@ -146,7 +197,7 @@ span.cell-text {
 
 span.cell-text-back {
     transform: rotateX(180deg);
-    transition: transform 0.8s;
+    transition: transform 0.7s;
 }
 
 @keyframes grow-shrink {
@@ -178,9 +229,8 @@ div.cell.dark {
 
 div.cell-back {
     transform: rotateX(180deg);
-    transition: transform 0.8s;
+    transition: transform 0.7s;
 }
-
 
 div.cell-incorrect.dark {
     background-color: #39393B;
