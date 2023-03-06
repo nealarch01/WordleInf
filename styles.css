@@ -107,6 +107,7 @@ div.keyboard-row {
 div.key {
     height: 75px;
     width: 55px;
+    font-size: 1.2em;
     background-color: #D4D6DA;
     color: black;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -127,7 +128,15 @@ div.key.grayed {
 }
 
 div#enter-btn {
-    width: 80px;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 1.15em;
+}
+
+div#delete-btn {
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 1.15em;
 }
 
 div.key-light {
@@ -197,7 +206,7 @@ span.cell-text {
 
 span.cell-text-back {
     transform: rotateX(180deg);
-    transition: transform 0.7s;
+    transition: transform 0.7s ease-out;
 }
 
 @keyframes grow-shrink {
