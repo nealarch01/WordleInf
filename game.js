@@ -10,10 +10,13 @@ fetch("./words.json")
     .then(response => response.json())
     .then(data => {
         WORDS = data;
+        for (let i = 0; i < WORDS.length; i++) {
+            WORDMAP.set(WORDS[i], true);
+        }
         newGame();
     });
 
-const FLIP_DURATION = 450;
+const FLIP_DURATION = 400;
 
 // State Variables
 var isDarkMode = false;
@@ -40,6 +43,10 @@ function checkAnswer() {
         shakeRow(currentRow);
         return; 
     }
+    if (!isWordInList(userInput)) {
+        shakeRow(currentRow);
+        return;
+    }
     updateBoard(userInput);
     const maxDelay = FLIP_DURATION * userInput.length;
     setTimeout(() => {
@@ -51,6 +58,10 @@ function checkAnswer() {
         }
         moveNextRow();
     }, maxDelay + 100); // Add a safety delay (+100) for the animation to finish
+}
+
+function isWordInList(word) {
+    return WORDMAP.get(word) !== undefined;
 }
 
 function moveNextRow() {
@@ -142,13 +153,13 @@ function deleteCellInput() {
     var cellRef = document.getElementById(`r${currentRow}c${currentCol}`);
     gameBoard[currentRow][currentCol] = "";
     cellRef.firstChild.innerHTML = "";
-    cellRef.classList.remove("animate-grow-shrink")
+    cellRef.classList.remove("animate-grow-shrink");
 }
 
 function toggleDarkMode() {
     isDarkMode = !isDarkMode;
     console.log(`Toggling mode: ${isDarkMode ? "dark" : "light"}`);
-    var bodyRootRef = document.getElementById("root")
+    var bodyRootRef = document.getElementById("root");
     document.querySelector("div.top-bar").classList.toggle("dark");
     bodyRootRef.className = isDarkMode ? "root-dark" : "root-light";
     // Select all cells
@@ -234,6 +245,13 @@ function shakeRow(rowNumber) {
     }, 400);
 }
 
+
+//
+// KEYBOARD 
+//
+function updateUsedKeys() {
+
+}
 
 
 // 
@@ -328,11 +346,4 @@ const darkModeToggler = document.querySelector(".dark-mode-toggler");
 darkModeToggler.addEventListener("click", (event) => {
     event.preventDefault(); // Prevents the page from reloading
     toggleDarkMode();
-    if (isDarkMode) {
-        darkModeToggler.classList.remove("light");
-        darkModeToggler.classList.add("dark");
-    } else {
-        darkModeToggler.classList.remove("dark");
-        darkModeToggler.classList.add("light");
-    }
 });
