@@ -61,7 +61,11 @@ function checkAnswer() {
 }
 
 function isWordInList(word) {
-    return WORDMAP.get(word) !== undefined;
+    word = word.toLowerCase();
+    if (WORDMAP.get(word) === undefined) {
+        return false;
+    }
+    return true;
 }
 
 function moveNextRow() {
